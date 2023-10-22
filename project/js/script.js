@@ -14,7 +14,7 @@
 
 'use strict';
 
-const movieDB = {
+const movieDB = {           //создаем объект, в котором создаем массив с фильмами
     movies: [
         "Логан",
         "Лига справедливости",
@@ -24,59 +24,59 @@ const movieDB = {
     ]
 };
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', () => {   
 
 
-const adv = document.querySelectorAll('.promo__adv img'),
-    poster = document.querySelector('.promo__bg'),
-    genre = poster.querySelector('.promo__genre'),
-    movieList = document.querySelector('.promo__interactive-list'),
-    addForm = document.querySelector('form.add'),
-    addInput = addForm.querySelector('.adding__input'),
-    checkbox = addForm.querySelector('[type="checkbox"]');
+const adv = document.querySelectorAll('.promo__adv img'),       //создаем необходимые переменные
+    poster = document.querySelector('.promo__bg'),                      //постер
+    genre = poster.querySelector('.promo__genre'),                         //жанр фильма
+    movieList = document.querySelector('.promo__interactive-list'),         //интерактивный список
+    addForm = document.querySelector('form.add'),                           //форма
+    addInput = addForm.querySelector('.adding__input'),                     //ввод названия фильма
+    checkbox = addForm.querySelector('[type="checkbox"]');                  //флажок
 
-addForm.addEventListener('submit', (event) => {
-    event.preventDefault();
+addForm.addEventListener('submit', (event) => {     //событие на отправку формы
+    event.preventDefault();     //отменяем обновление сттраницы
 
-    let newFilm = addInput.value;
-    const favorite = checkbox.checked;
+    let newFilm = addInput.value;   //присваиваем переменной значение ввода
+    const favorite = checkbox.checked;  //присваиваем переменной статус флажка
 
-    if (newFilm) {
+    if (newFilm) {  //проверяем, не пустая ли строка
 
-        if (newFilm.length > 21) {
-            newFilm = `${newFilm.substring(0, 22)}...`;
+        if (newFilm.length > 21) {  //проверяем на длину
+            newFilm = `${newFilm.substring(0, 22)}...`; //если больше, то прибавляем ... - интерполяция + подсртрока
         }
 
-        if (favorite) {
-            console.log('New movie added');
+        if (favorite) {     //проверяем статус флажка
+            console.log('New movie added'); //если утснановлен, то вывод в консоль
         }
-        movieDB.movies.push(newFilm);
-        sortArr(movieDB.movies);
+        movieDB.movies.push(newFilm);   //добавляем в массив новый фильм - push()
+        sortArr(movieDB.movies);    //сортируем массив
 
-        createMovieList(movieDB.movies, movieList);
+        createMovieList(movieDB.movies, movieList); //создаем новый интерактивный список
     }
 
     
 
-    event.target.reset();
+    event.target.reset();   //сбрасываем данные в форме
 });
 
 //УДАЛЕНИЕ РЕКЛАМЫ
 
-const deleteAdv = (arr) => {
-    arr.forEach (item => {
-     item.remove();
+const deleteAdv = (arr) => {    //создаем функцию
+    arr.forEach (item => {      //перебираем массив
+     item.remove();                //удаляем каждый элемент
     });
 };
 
-
+//ВНОСИМ ИЗМЕНЕНИЯ В ПОСТЕР
 
 const makeChanges = () => {
-    genre.textContent = 'Драма';
-    poster.style.backgroundImage = "url('img/bg.jpg')";
+    genre.textContent = 'Драма';    //меняем жанр через textContent
+    poster.style.backgroundImage = "url('img/bg.jpg')"; //меняем фон
 };
 
-
+//СОРТИРУЕМ СПИСОК
 
 const sortArr = (arr) => {
     arr.sort();
@@ -113,24 +113,24 @@ const sortArr = (arr) => {
 
 
 
-function createMovieList(films, parent) {
-    parent.innerHTML = "";
+function createMovieList(films, parent) {       //создание интерактивного списка
+    parent.innerHTML = "";      //сбрасываем старый список
     sortArr(films);
 
-    films.forEach((film, i) => {
-        parent.innerHTML += `
-             <li class="promo__interactive-item">${i + 1} ${film}
+    films.forEach((film, i) => {    //для каждого добавляем структуру разметки
+        parent.innerHTML += `       
+             <li class="promo__interactive-item">${i + 1} ${film} 
                 <div class="delete"></div>
             </li>
         `;
     });
 
-        document.querySelectorAll('.delete').forEach((btn, i) => {
-            btn.addEventListener('click', () => {
-                btn.parentElement.remove();
-                movieDB.movies.splice(i, 1);
+        document.querySelectorAll('.delete').forEach((btn, i) => {      //выбираем все корзины
+            btn.addEventListener('click', () => {       //при нажатии на кнопку удаляется родитель
+                btn.parentElement.remove();             //из списка как родитель кнопки
+                movieDB.movies.splice(i, 1);            //из массива как номер по порядку
 
-                createMovieList(films, parent);
+                createMovieList(films, parent);         //заново создаем список
             });
     });
 
